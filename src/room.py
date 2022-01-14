@@ -4,6 +4,8 @@ class Room:
         self.fee = fee
         self.occupancy = []
         self.tracklist = []
+        self.song_search = []
+        self.queue = []
 
     # def add_guest_to_room(self, guest):
     #     if len(self.occupancy) < 5:
@@ -20,6 +22,9 @@ class Room:
         for guest in party:
             self.occupancy.append(guest)
 
+    def add_single_track(self, track):
+        self.tracklist.append(track)
+
     def add_tracklist(self, tracks):
         for track in tracks:
             self.tracklist.append(track)
@@ -33,3 +38,8 @@ class Room:
             capacity_reached = True
 
         return capacity_reached
+
+    def find_song_by_name(self, name):
+        for track in self.tracklist:
+            if track.title == name:
+                self.song_search.append(track)

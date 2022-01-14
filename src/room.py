@@ -1,7 +1,8 @@
 class Room:
-    def __init__(self, number, fee):
+    def __init__(self, number, fee, capacity):
         self.number = number
         self.fee = fee
+        self.capacity = capacity
         self.occupancy = []
         self.tracklist = []
         self.song_search = []
@@ -21,6 +22,14 @@ class Room:
     def add_party_to_room(self, party):
         for guest in party:
             self.occupancy.append(guest)
+
+    def remove_guest_from_room(self, name):
+        for guest in self.occupancy:
+            if guest.name == name:
+                self.occupancy.remove(guest)
+
+    def remove_party_from_room(self):
+        self.occupancy.clear()
 
     def add_single_track(self, track):
         self.tracklist.append(track)

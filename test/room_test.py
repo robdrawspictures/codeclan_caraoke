@@ -12,6 +12,7 @@ class TestRoom(unittest.TestCase):
         self.guest4 = Guest("Lynne", 30)
         self.guest5 = Guest("Eric", 0)
         self.guest6 = Guest("Sam", 80)
+        self.guest7 = Guest("Rachel", 90)
         self.party1 = [self.guest1, self.guest2, self.guest3,
                     self.guest4, self.guest5]
         self.song1 = Song("Raining Blood", "Slayer", "A")
@@ -39,30 +40,41 @@ class TestRoom(unittest.TestCase):
 
     def test_bulk_add(self):
         self.room1.add_party_to_room(self.party1)
-        self.assertEqual(5, self.room1.check_room_capacity())
+        self.assertEqual(4, self.room1.check_room_capacity())
 
     def test_remove_guest_from_room(self):
         self.room1.add_party_to_room(self.party1)
-        self.assertEqual(5, self.room1.check_room_capacity())
-        self.room1.remove_guest_from_room("John")
         self.assertEqual(4, self.room1.check_room_capacity())
-        self.room1.remove_guest_from_room("Eric")
+        self.room1.remove_guest_from_room("John")
         self.assertEqual(3, self.room1.check_room_capacity())
 
     def test_remove_party_from_room(self):
         self.room1.add_party_to_room(self.party1)
-        self.assertEqual(5, self.room1.check_room_capacity())
+        self.assertEqual(4, self.room1.check_room_capacity())
         self.room1.remove_party_from_room()
         self.assertEqual(0, self.room1.check_room_capacity())
 
     def test_max_occupancy_reached(self):
         self.room1.add_party_to_room(self.party1)
-        self.assertEqual(5, self.room1.check_room_capacity())
+        self.assertEqual(4, self.room1.check_room_capacity())
         self.assertFalse(self.room1.check_max_capacity())
         self.room1.add_guest_to_room(self.guest6)
+        self.room1.add_guest_to_room(self.guest7)
         self.assertEqual(6, self.room1.check_room_capacity())
         self.assertTrue(self.room1.check_max_capacity())
 
+    def test_charge_entry_fee(self):
+        self.room1.add_guest_to_room(self.guest1)
+        self.assertEqual(1, self.room1.check_room_capacity())
+        self.assertEqual(45, self.room1.occupancy[0].cash)
+        self.room1.add_guest_to_room(self.guest5)
+        self.assertEqual(1, self.room1.check_room_capacity())
+
+    def test_charge_party_entry_fee(self):
+        self.room1.add_party_to_room(self.party1)
+        self.assertEqual(4, self.room1.check_room_capacity())
+        self.assertEqual(35, self.room1.occupancy[1].cash)
+        
     def test_add_track(self):
         self.room1.add_single_track(self.song11)
         self.assertEqual(1, len(self.room1.tracklist))

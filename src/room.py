@@ -58,3 +58,16 @@ class Room:
         for track in self.tracklist:
             if track.title == name:
                 self.song_search.append(track)
+
+    def add_song_to_queue(self, title, guest):
+        for song in self.song_search:
+            if song.title == title and song.title == guest.fav_song:
+                return "Aww absolute banger, mate."
+            elif song.title == title:
+                self.queue.append(song)
+                print(f"Up Next: {guest.name} singing '{title}'!")
+                self.song_search.clear()
+        
+        
+
+

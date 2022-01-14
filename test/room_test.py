@@ -6,13 +6,13 @@ from src.song import Song
 class TestRoom(unittest.TestCase):
     def setUp(self):
         self.room1 = Room(1, 5, 5)
-        self.guest1 = Guest("Bobby", 50)
-        self.guest2 = Guest("Dan", 40)
-        self.guest3 = Guest("John", 70)
-        self.guest4 = Guest("Lynne", 30)
-        self.guest5 = Guest("Eric", 0)
-        self.guest6 = Guest("Sam", 80)
-        self.guest7 = Guest("Rachel", 90)
+        self.guest1 = Guest("Bobby", 50, "Still Life", "B")
+        self.guest2 = Guest("Dan", 40, "Tango Til They're Sore", "C")
+        self.guest3 = Guest("John", 70, "Don't Stop Believin", "A")
+        self.guest4 = Guest("Lynne", 30, "Total Eclipse Of The Heart", "C")
+        self.guest5 = Guest("Eric", 0, "Dog Days Are Over", "D")
+        self.guest6 = Guest("Sam", 80, "Auld Lang Syne", "A")
+        self.guest7 = Guest("Rachel", 90, "Copa Cabana", "B")
         self.party1 = [self.guest1, self.guest2, self.guest3,
                     self.guest4, self.guest5]
         self.song1 = Song("Raining Blood", "Slayer", "A")
@@ -101,3 +101,18 @@ class TestRoom(unittest.TestCase):
     #     self.assertEqual("Pulp", self.room1.song_search[0].artist)
 
     # This is humped for now, I'll come back to it later.
+
+    def test_add_song_to_queue(self):
+        self.room1.add_tracklist(self.songbook1)
+        self.room1.add_tracklist(self.songbook2)
+        self.room1.find_song_by_name("Creep")
+        self.room1.add_song_to_queue(self.room1.song_search[0].title, self.guest1)
+        self.assertEqual(0, len(self.room1.song_search))
+        self.assertEqual(1, len(self.room1.queue))
+
+    def test_play_favourite_song(self):
+        self.room1.add_tracklist(self.songbook1)
+        self.room1.add_tracklist(self.songbook2)
+        self.room1.add_guest_to_room(self.guest2)
+        self.room1.find_song_by_name("Tango Til They're Sore")
+        self.assertEqual("Aww absolute banger, mate.", self.room1.add_song_to_queue(self.room1.song_search[0].title, self.guest2))

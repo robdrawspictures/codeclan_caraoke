@@ -2,10 +2,12 @@ import unittest
 from src.room import Room
 from src.guest import Guest
 from src.song import Song
+from src.bar import Bar
 
 class TestRoom(unittest.TestCase):
     def setUp(self):
         self.room1 = Room(1, 5, 5)
+        self.bar = Bar()
         self.guest1 = Guest("Bobby", 50, "Still Life", "B")
         self.guest2 = Guest("Dan", 40, "Tango Til They're Sore", "C")
         self.guest3 = Guest("John", 70, "Don't Stop Believin", "A")
@@ -116,3 +118,36 @@ class TestRoom(unittest.TestCase):
         self.room1.add_guest_to_room(self.guest2)
         self.room1.find_song_by_name("Tango Til They're Sore")
         self.assertEqual("Aww absolute banger, mate.", self.room1.add_song_to_queue(self.room1.song_search[0].title, self.guest2))
+
+    def test_empty_queue_prompt(self):
+        self.assertEqual("Sing, you cowards!", self.room1.empty_queue_prompt())
+
+    # def test_convert_str_to_int(self):
+    #     self.room1.add_single_track(self.song1)
+    #     self.room1.add_guest_to_room(self.guest1)
+    #     self.room1.convert_str_to_int(self.guest1.singing_ability)
+    #     self.room1.convert_str_to_int(self.song1.difficulty)
+    #     self.assertEqual(6, self.guest1.singing_ability)
+    #     self.assertEqual(8, self.song1.difficulty)
+
+    def test_guests_total_money(self):
+        self.room1.add_party_to_room(self.party1)
+        self.assertEqual(4, len(self.room1.occupancy))
+        self.room1.guests_total_money()
+        self.assertEqual(170, self.room1.guest_budget)
+
+    def test_guests_can_pay_tab(self):
+        self.room1.add_party_to_room(self.party1)
+        self.room1.guests_total_money()       
+        self.assertTrue(self.room1.guests_can_pay_tab())
+        self.room1.tab = 200
+        self.assertFalse(self.room1.guests_can_pay_tab())
+
+    def test_increase_tab(self):
+        self.room1.add_party_to_room(self.party1)
+        self.room1.guests_total_money()
+        self.room1.increase_tab(self.bar.food)
+        self.assertEqual(10, self.room1.tab)
+        self.room1.remove_party_from_room()
+        self.room1.guests_total_money()
+        self.assertEqual("Pay your bill, freeloader.", self.room1.increase_tab(self.bar.drink))

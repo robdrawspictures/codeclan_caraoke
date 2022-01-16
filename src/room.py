@@ -7,6 +7,11 @@ class Room:
         self.tracklist = []
         self.song_search = []
         self.queue = []
+        self.tab = 0
+        self.guest_budget = 0
+        self.ratings = {"S" : 10, "A" : 8, "B" : 6,
+        "C" : 4, "D" : 2, "F" : 0
+        }
 
     # def add_guest_to_room(self, guest):
     #     if len(self.occupancy) < 5:
@@ -65,9 +70,39 @@ class Room:
                 return "Aww absolute banger, mate."
             elif song.title == title:
                 self.queue.append(song)
-                print(f"Up Next: {guest.name} singing '{title}'!")
                 self.song_search.clear()
-        
-        
+                return f"Up Next: {guest.name} singing '{title}'!"
+                    
+    def empty_queue_prompt(self):
+        if len(self.queue) == 0:
+            return "Sing, you cowards!"
 
+    def guests_total_money(self):
+        purse = 0
+        for guest in self.occupancy:
+            purse += guest.cash
+
+        self.guest_budget = purse
+
+    def guests_can_pay_tab(self):
+        if self.guest_budget > self.tab:
+            return True
+        else:
+            return False
+
+    def increase_tab(self, purchase):
+        if self.guests_can_pay_tab():
+            self.tab += purchase
+        else:
+            return "Pay your bill, freeloader."
+
+    # def convert_str_to_int(self, string):  
+    #     for rating, number in self.ratings.items():
+    #         if rating == string:
+    #             string = number
+
+    # ^ Currently busted because I can't figure out how
+    # To permanently change a variable outside a function.
+    # In its current state, the function correctly re-assigns
+    # the variable, but it doesn't persist outside the function.
 

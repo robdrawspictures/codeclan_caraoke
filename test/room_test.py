@@ -122,14 +122,6 @@ class TestRoom(unittest.TestCase):
     def test_empty_queue_prompt(self):
         self.assertEqual("Sing, you cowards!", self.room1.empty_queue_prompt())
 
-    # def test_convert_str_to_int(self):
-    #     self.room1.add_single_track(self.song1)
-    #     self.room1.add_guest_to_room(self.guest1)
-    #     self.room1.convert_str_to_int(self.guest1.singing_ability)
-    #     self.room1.convert_str_to_int(self.song1.difficulty)
-    #     self.assertEqual(6, self.guest1.singing_ability)
-    #     self.assertEqual(8, self.song1.difficulty)
-
     def test_guests_total_money(self):
         self.room1.add_party_to_room(self.party1)
         self.assertEqual(4, len(self.room1.occupancy))
@@ -151,3 +143,12 @@ class TestRoom(unittest.TestCase):
         self.room1.remove_party_from_room()
         self.room1.guests_total_money()
         self.assertEqual("Pay your bill, freeloader.", self.room1.increase_tab(self.bar.drink))
+
+    def test_rate_performance(self):
+        self.room1.add_single_track(self.song1)
+        self.room1.add_guest_to_room(self.guest1)
+        self.assertEqual(f"{self.guest1.name} tried their best. Probably.", self.room1.rate_performance(self.guest1, self.song1.difficulty))
+        self.room1.add_single_track(self.song5)
+        self.room1.add_guest_to_room(self.guest4)
+        self.assertEqual("I envy the deaf.", self.room1.rate_performance(self.guest4, self.song5.difficulty))
+        

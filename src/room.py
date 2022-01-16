@@ -9,9 +9,7 @@ class Room:
         self.queue = []
         self.tab = 0
         self.guest_budget = 0
-        self.ratings = {"S" : 10, "A" : 8, "B" : 6,
-        "C" : 4, "D" : 2, "F" : 0
-        }
+        
 
     # def add_guest_to_room(self, guest):
     #     if len(self.occupancy) < 5:
@@ -96,13 +94,33 @@ class Room:
         else:
             return "Pay your bill, freeloader."
 
-    # def convert_str_to_int(self, string):  
-    #     for rating, number in self.ratings.items():
-    #         if rating == string:
-    #             string = number
+    def rate_performance(self, guest, song):
+        ratings = {"S" : 10, "A" : 8, "B" : 6,
+        "C" : 4, "D" : 2, "F" : 0
+        }
+        for rating, number in ratings.items():
+            if rating == guest.singing_ability:
+                guest.singing_ability = number
 
-    # ^ Currently busted because I can't figure out how
-    # To permanently change a variable outside a function.
-    # In its current state, the function correctly re-assigns
-    # the variable, but it doesn't persist outside the function.
+        for rating, number in ratings.items():
+            if rating == song:
+                song = number
+
+        if guest.singing_ability > song:
+            return f"{guest.name} crushed it!"
+        elif guest.singing_ability == song:
+            return f"Great job, {guest.name}!"
+        elif guest.singing_ability < song - 4:
+            return "I envy the deaf."
+        elif guest.singing_ability < song - 2:
+            return "I envy the deaf."
+        else:
+            return f"{guest.name} tried their best. Probably."
+
+    # I realised later than I'm willing to admit that using
+    # a letter-based ranking system was a really bad idea,
+    # I only kept it because I wanted to see if I could make
+    # this method work, but in retrospect just making
+    # singing_ability/difficulty integers from the start
+    # would have been infinitely more straightforward.
 
